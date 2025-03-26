@@ -1,5 +1,10 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { getUser } from './store/slices/userSlice';
+import ProtectedRoute from './components/ProtectedRoute';
 
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
@@ -11,30 +16,70 @@ import ManageProjects from './pages/ManageProjects';
 import ViewProject from './pages/ViewProject';
 import UpdateProject from './pages/UpdateProject';
 
-import { ToastContainer } from 'react-toastify';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { getUser } from './store/slices/userSlice';
-
 function App() {
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getUser());
-  });
+  }, [dispatch]);
 
   return (
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/password/forgot" element={<ForgotPassword />} />
           <Route path="/password/reset/:token" element={<ResetPassword />} />
-          <Route path="/manage/skills" element={<ManageSkills />} />
-          <Route path="/manage/timeline" element={<ManageTimeline />} />
-          <Route path="/manage/projects" element={<ManageProjects />} />
-          <Route path="/view/project/:id" element={<ViewProject />} />
-          <Route path="/update/project/:id" element={<UpdateProject />} />
+
+          {/* Protected Routes */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <HomePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/manage/skills"
+            element={
+              <ProtectedRoute>
+                <ManageSkills />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/manage/timeline"
+            element={
+              <ProtectedRoute>
+                <ManageTimeline />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/manage/projects"
+            element={
+              <ProtectedRoute>
+                <ManageProjects />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/view/project/:id"
+            element={
+              <ProtectedRoute>
+                <ViewProject />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/update/project/:id"
+            element={
+              <ProtectedRoute>
+                <UpdateProject />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
         <ToastContainer position="bottom-right" theme="dark" />
       </Router>

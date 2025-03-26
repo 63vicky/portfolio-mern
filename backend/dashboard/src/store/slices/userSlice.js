@@ -2,6 +2,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  'https://portfolio-mern-xj4h.onrender.com/api/v1';
+
 const initialState = {
   loading: false,
   user: {},
@@ -121,7 +125,7 @@ export const login = (email, password) => async (dispatch) => {
   dispatch(UserSlice.actions.loginRequest());
   try {
     const { data } = await axios.post(
-      'https://portfolio-mern-xj4h.onrender.com/api/v1/user/login',
+      `${API_URL}/user/login`,
       { email, password },
       { withCredentials: true, headers: { 'Content-Type': 'application/json' } }
     );
@@ -129,38 +133,42 @@ export const login = (email, password) => async (dispatch) => {
     dispatch(UserSlice.actions.loginSuccess(data.user));
     dispatch(UserSlice.actions.clearAllErrors());
   } catch (error) {
-    dispatch(UserSlice.actions.loginFailed(error.response.data.message));
+    const errorMessage =
+      error.response?.data?.message ||
+      'Network error occurred. Please try again.';
+    dispatch(UserSlice.actions.loginFailed(errorMessage));
   }
 };
 
 export const getUser = () => async (dispatch) => {
   dispatch(UserSlice.actions.loadUserRequest());
   try {
-    const { data } = await axios.get(
-      'https://portfolio-mern-xj4h.onrender.com/api/v1/user/me',
-
-      { withCredentials: true }
-    );
+    const { data } = await axios.get(`${API_URL}/user/me`, {
+      withCredentials: true,
+    });
 
     dispatch(UserSlice.actions.loadUserSuccess(data.user));
     dispatch(UserSlice.actions.clearAllErrors());
   } catch (error) {
-    dispatch(UserSlice.actions.loadUserFailed(error.response.data.message));
+    const errorMessage =
+      error.response?.data?.message ||
+      'Failed to fetch user data. Please try again.';
+    dispatch(UserSlice.actions.loadUserFailed(errorMessage));
   }
 };
 
 export const logout = () => async (dispatch) => {
   try {
-    const { data } = await axios.get(
-      'https://portfolio-mern-xj4h.onrender.com/api/v1/user/logout',
+    const { data } = await axios.get(`${API_URL}/user/logout`, {
+      withCredentials: true,
+    });
 
-      { withCredentials: true }
-    );
-
-    dispatch(UserSlice.actions.logoutSuccess(data.user));
+    dispatch(UserSlice.actions.logoutSuccess(data.message));
     dispatch(UserSlice.actions.clearAllErrors());
   } catch (error) {
-    dispatch(UserSlice.actions.logoutFailed(error.response.data.message));
+    const errorMessage =
+      error.response?.data?.message || 'Failed to logout. Please try again.';
+    dispatch(UserSlice.actions.logoutFailed(errorMessage));
   }
 };
 
@@ -169,7 +177,7 @@ export const updatePassword =
     dispatch(UserSlice.actions.updatePasswordRequest());
     try {
       const { data } = await axios.put(
-        'https://portfolio-mern-xj4h.onrender.com/api/v1/user/update/password',
+        `${API_URL}/user/update/password`,
         { currentPassword, newPassword, confirmPassword },
         {
           withCredentials: true,
@@ -180,30 +188,28 @@ export const updatePassword =
       dispatch(UserSlice.actions.updatePasswordSuccess(data.message));
       dispatch(UserSlice.actions.clearAllErrors());
     } catch (error) {
-      dispatch(
-        UserSlice.actions.updatePasswordFailed(error.response.data.message)
-      );
+      const errorMessage =
+        error.response?.data?.message ||
+        'Failed to update password. Please try again.';
+      dispatch(UserSlice.actions.updatePasswordFailed(errorMessage));
     }
   };
 
 export const updateProfile = (newData) => async (dispatch) => {
   dispatch(UserSlice.actions.updateProfileRequest());
   try {
-    const { data } = await axios.put(
-      'https://portfolio-mern-xj4h.onrender.com/api/v1/user/update/me',
-      newData,
-      {
-        withCredentials: true,
-        headers: { 'Content-Type': 'multipart/form-data' },
-      }
-    );
+    const { data } = await axios.put(`${API_URL}/user/update/me`, newData, {
+      withCredentials: true,
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
 
     dispatch(UserSlice.actions.updateProfileSuccess(data.message));
     dispatch(UserSlice.actions.clearAllErrors());
   } catch (error) {
-    dispatch(
-      UserSlice.actions.updateProfileFailed(error.response.data.message)
-    );
+    const errorMessage =
+      error.response?.data?.message ||
+      'Failed to update profile. Please try again.';
+    dispatch(UserSlice.actions.updateProfileFailed(errorMessage));
   }
 };
 
