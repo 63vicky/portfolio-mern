@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { clearAllUserErrors, login } from '@/store/slices/userSlice';
 import { toast } from 'react-toastify';
-import SpecialLoadingButton from './sub-components/specialLoadingButton';
+import SpecialLoadingButton from './sub-components/SpecialLoadingButton';
 import formBack from '../assets/formBack.jpg';
 import { Eye, EyeClosedIcon, EyeIcon } from 'lucide-react';
 
