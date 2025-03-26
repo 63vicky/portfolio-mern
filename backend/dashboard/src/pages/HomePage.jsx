@@ -39,6 +39,7 @@ const HomePage = () => {
   };
 
   useEffect(() => {
+    console.log(isAuthenticated, user, error);
     if (error) {
       toast.error(error);
       dispatch(clearAllUserErrors());
