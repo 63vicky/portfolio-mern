@@ -1,2 +1,6 @@
-.env
 node_modules
+.env
+uploads/*
+!uploads/.gitkeep
+public/*
+!public/.gitkeep
