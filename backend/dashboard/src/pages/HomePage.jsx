@@ -26,6 +26,11 @@ import { toast } from 'react-toastify';
 import Dashboard from './sub-components/Dashboard';
 import Account from './sub-components/Account';
 import ThemeToggle from './ThemeToggle';
+import Messages from './sub-components/Messages';
+import AddProject from './sub-components/AddProject';
+import AddSkill from './sub-components/AddSkill';
+import AddSoftwareApplications from './sub-components/AddSoftwareApplications';
+import AddTimeline from './sub-components/AddTimeline';
 
 const HomePage = () => {
   const [active, setActive] = useState(false);
@@ -205,7 +210,7 @@ const HomePage = () => {
             </TooltipProvider>
           </nav>
         </aside>
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 max-[900px]:h-[100px]">
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 py-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 max-[900px]:h-[100px]">
           <Sheet>
             <SheetTrigger asChild>
               <Button size="icon" variant="outline" className="sm:hidden">
@@ -290,14 +295,14 @@ const HomePage = () => {
                 <SheetTrigger asChild>
                   <Link
                     className={`flex items-center gap-4 px-2.5 ${
-                      active === 'Timeline'
+                      active === 'Add Timeline'
                         ? 'text-foreground'
                         : 'text-muted-foreground hover:text-foreground '
                     }`}
-                    onClick={() => setActive('Timeline')}
+                    onClick={() => setActive('Add Timeline')}
                   >
                     <History className="h-5 w-5" />
-                    Timeline
+                    Add Timeline
                   </Link>
                 </SheetTrigger>
                 <SheetTrigger asChild>
@@ -328,14 +333,14 @@ const HomePage = () => {
             </SheetContent>
           </Sheet>
 
-          <div className="flex items-center gap-4 md:grow-0 w-full sm:ml-16 sm:mt-5">
+          <div className="flex items-center gap-4 md:grow-0 w-full sm:ml-16">
             <img
               src={user && user.avatar && user.avatar.url}
               alt="avatar"
-              className="w-20 h-20 rounded-full max-[900px]:hidden"
+              className="w-15 h-15 rounded-full max-[900px]:hidden"
             />
-            <h1 className="text-4xl max-[900px]:text-2xl">
-              Welcome back, {user.fullName}
+            <h1 className="text-3xl max-[900px]:text-2xl">
+              Welcome, {user.fullName}
             </h1>
             <ThemeToggle className="ml-auto" />
           </div>

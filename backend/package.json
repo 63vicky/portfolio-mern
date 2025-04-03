@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js",
+    "dev": "nodemon server.js && cd dashboard && npm run dev",
+    "dashboardDev": "cd dashboard && npm run dev",
     "build": "cd dashboard && npm install && npm run build",
     "build:prod": "npm install && npm run build"
   },

@@ -25,7 +25,7 @@ const Profile = () => {
                   <img
                     src={user && user.avatar && user.avatar.url}
                     alt="avatar"
-                    className="w-full h-auto sm:w-72 sm:h-72 rounded-2xl"
+                    className="w-full h-auto sm:w-64 sm:h-64 rounded-2xl"
                   />
                 </div>
                 <div className="grid gap-2 w-full sm:w-72">
@@ -37,7 +37,7 @@ const Profile = () => {
                     <img
                       src={user && user.resume && user.resume.url}
                       alt="avatar"
-                      className="w-full  h-auto sm:w-72 sm:h-72 rounded-2xl"
+                      className="w-full h-auto sm:w-64 sm:h-64 rounded-2xl"
                     />
                   </Link>
                 </div>

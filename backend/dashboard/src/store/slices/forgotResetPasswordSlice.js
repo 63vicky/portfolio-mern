@@ -78,7 +78,8 @@ export const resetPassword =
     dispatch(forgotResetPassSlice.actions.resetPasswordRequest());
     try {
       const { data } = await axios.put(
-        `https://portfolio-mern-xj4h.onrender.com/api/v1/user/password/reset/${token}`,
+        // `https://portfolio-mern-xj4h.onrender.com/api/v1/user/password/reset/${token}`,
+        `http://localhost:4000/api/v1/user/password/reset/${token}`,
         { password, confirmPassword },
         {
           withCredentials: true,

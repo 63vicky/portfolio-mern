@@ -1,8 +1,13 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from './store/slices/userSlice';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -15,14 +20,26 @@ import ManageTimeline from './pages/ManageTimeline';
 import ManageProjects from './pages/ManageProjects';
 import ViewProject from './pages/ViewProject';
 import UpdateProject from './pages/UpdateProject';
+import { getAllMessages } from './store/slices/messagesSlice';
+import SpecialLoadingButton from './pages/sub-components/SpecialLoadingButton';
+import { getAllTimeline } from './store/slices/timelineSlice';
 
 function App() {
   const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(getUser());
+    dispatch(getAllMessages());
+    dispatch(getAllTimeline());
   }, [dispatch]);
-
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <SpecialLoadingButton />
+      </div>
+    );
+  }
   return (
     <>
       <Router>
@@ -79,6 +96,11 @@ function App() {
                 <UpdateProject />
               </ProtectedRoute>
             }
+          />
+          <Route
+            path="*"
+            element={<Navigate to="/" replace />}
+            replace="true"
           />
         </Routes>
         <ToastContainer position="bottom-right" theme="dark" />
