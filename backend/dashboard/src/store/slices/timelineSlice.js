@@ -7,6 +7,10 @@ const initialState = {
   message: null,
   timeline: [],
 };
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  // 'https://portfolio-mern-xj4h.onrender.com/api/v1';
+  'http://localhost:4000/api/v1';
 
 const timelineSlice = createSlice({
   name: 'timeline',
@@ -75,12 +79,9 @@ const timelineSlice = createSlice({
 export const getAllTimeline = () => async (dispatch) => {
   dispatch(timelineSlice.actions.getAllTimelineRequest());
   try {
-    const { data } = await axios.get(
-      `http://localhost:4000/api/v1/timeline/getall`,
-      {
-        withCredentials: true,
-      }
-    );
+    const { data } = await axios.get(`${API_URL}/timeline/getall`, {
+      withCredentials: true,
+    });
     dispatch(timelineSlice.actions.getAllTimelineSuccess(data.timelines));
     dispatch(timelineSlice.actions.clearAllErrors());
   } catch (error) {
@@ -93,12 +94,9 @@ export const getAllTimeline = () => async (dispatch) => {
 export const deleteTimeline = (id) => async (dispatch) => {
   dispatch(timelineSlice.actions.deleteTimelineRequest());
   try {
-    const { data } = await axios.delete(
-      `http://localhost:4000/api/v1/timeline/delete/${id}`,
-      {
-        withCredentials: true,
-      }
-    );
+    const { data } = await axios.delete(`${API_URL}/timeline/delete/${id}`, {
+      withCredentials: true,
+    });
     dispatch(
       timelineSlice.actions.deleteTimelineSuccess({ message: data.message, id })
     );
@@ -113,16 +111,12 @@ export const deleteTimeline = (id) => async (dispatch) => {
 export const addNewTimeline = (timelineData) => async (dispatch) => {
   dispatch(timelineSlice.actions.addTimelineRequest());
   try {
-    const { data } = await axios.post(
-      `http://localhost:4000/api/v1/timeline/add`,
-      timelineData,
-      {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    );
+    const { data } = await axios.post(`${API_URL}/timeline/add`, timelineData, {
+      withCredentials: true,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     dispatch(timelineSlice.actions.addTimelineSuccess(data));
     dispatch(timelineSlice.actions.clearAllErrors());
   } catch (error) {
