@@ -1,6 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  // 'https://portfolio-mern-xj4h.onrender.com/api/v1';
+  'http://localhost:4000/api/v1';
+
 const initialState = {
   loading: false,
   error: null,
@@ -58,12 +63,9 @@ const messagesSlice = createSlice({
 export const getAllMessages = () => async (dispatch) => {
   dispatch(messagesSlice.actions.getAllMessageRequest());
   try {
-    const { data } = await axios.get(
-      `http://localhost:4000/api/v1/message/getall`,
-      {
-        withCredentials: true,
-      }
-    );
+    const { data } = await axios.get(`${API_URL}/message/getall`, {
+      withCredentials: true,
+    });
     dispatch(messagesSlice.actions.getAllMessageSuccess(data.messages));
     dispatch(messagesSlice.actions.clearAllErrors());
   } catch (error) {
@@ -76,12 +78,9 @@ export const getAllMessages = () => async (dispatch) => {
 export const deleteMessage = (id) => async (dispatch) => {
   dispatch(messagesSlice.actions.deleteMessageRequest());
   try {
-    const { data } = await axios.delete(
-      `http://localhost:4000/api/v1/message/delete/${id}`,
-      {
-        withCredentials: true,
-      }
-    );
+    const { data } = await axios.delete(`${API_URL}/message/delete/${id}`, {
+      withCredentials: true,
+    });
     dispatch(messagesSlice.actions.deleteMessageSuccess(data.message));
     dispatch(messagesSlice.actions.clearAllErrors());
   } catch (error) {

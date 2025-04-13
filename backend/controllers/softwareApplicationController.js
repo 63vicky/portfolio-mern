@@ -4,18 +4,17 @@ import { SoftwareApplication } from '../models/softwareApplicationSchema.js';
 import { v2 as cloudinary } from 'cloudinary';
 
 export const addNewApplication = catchAsyncErrors(async (req, res, next) => {
+  const { name } = req.body;
+  if (!name) {
+    return next(new ErrorHandler("Software's Name Is Required!", 400));
+  }
+
   if (!req.files || Object.keys(req.files).length === 0) {
     return next(
       new ErrorHandler('Software Application Icon/SVG Required!', 400)
     );
   }
-
   const { svg } = req.files;
-  const { name } = req.body;
-
-  if (!name) {
-    return next(new ErrorHandler("Software's Name Is Required!", 400));
-  }
 
   const cloudinaryResponse = await cloudinary.uploader.upload(
     svg.tempFilePath,

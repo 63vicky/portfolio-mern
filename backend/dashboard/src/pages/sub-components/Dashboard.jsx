@@ -18,20 +18,20 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
-// import { clearAllSkillErrors } from '@/store/slices/skillSlice';
-// import {
-//   clearAllSoftwareAppErrors,
-//   deleteSoftwareApplication,
-//   getAllSoftwareApplications,
-//   resetSoftwareApplicationSlice,
-// } from '@/store/slices/softwareApplicationSlice';
+import { clearAllSkillSliceErrors } from '@/store/slices/skillSlice';
+import {
+  clearAllApplicationSliceErrors,
+  deleteApplication,
+  getAllApplications,
+  resetApplicationSlice,
+} from '@/store/slices/applicationSlice';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import SpecialLoadingButton from './SpecialLoadingButton';
 import { clearAllTimelineErrors } from '@/store/slices/timelineSlice';
-// import { clearAllProjectErrors } from '@/store/slices/projectSlice';
+import { clearAllProjectSliceError } from '@/store/slices/projectSlice';
 const Dashboard = () => {
   const navigateTo = useNavigate();
   const gotoMangeSkills = () => {
@@ -45,71 +45,71 @@ const Dashboard = () => {
   };
 
   const { user } = useSelector((state) => state.user);
-  // const {
-  //   skills,
-  //   loading: skillLoading,
-  //   error: skillError,
-  //   message: skillMessage,
-  // } = useSelector((state) => state.skill);
-  // const {
-  //   softwareApplications,
-  //   loading: appLoading,
-  //   error: appError,
-  //   message: appMessage,
-  // } = useSelector((state) => state.softwareApplications);
+  const {
+    skills,
+    loading: skillLoading,
+    error: skillError,
+    message: skillMessage,
+  } = useSelector((state) => state.skill);
+  const {
+    applications,
+    loading: appLoading,
+    error: appError,
+    message: appMessage,
+  } = useSelector((state) => state.application);
   const {
     timeline,
     loading: timelineLoading,
     error: timelineError,
     message: timelineMessage,
   } = useSelector((state) => state.timeline);
-  // const { projects, error: projectError } = useSelector(
-  //   (state) => state.project
-  // );
+  const { projects, error: projectError } = useSelector(
+    (state) => state.project
+  );
 
   const [appId, setAppId] = useState(null);
-  // const handleDeleteSoftwareApp = (id) => {
-  //   setAppId(id);
-  //   dispatch(deleteSoftwareApplication(id));
-  // };
+  const handleDeleteSoftwareApp = (id) => {
+    setAppId(id);
+    dispatch(deleteApplication(id));
+  };
 
   const dispatch = useDispatch();
   useEffect(() => {
-    //   // if (skillError) {
-    //   //   toast.error(skillError);
-    //   //   dispatch(clearAllSkillErrors());
-    //   // }
-    //   // if (appError) {
-    //   //   toast.error(appError);
-    //   //   dispatch(clearAllSoftwareAppErrors());
-    //   // }
-    //   // if (projectError) {
-    //   //   toast.error(projectError);
-    //   //   dispatch(clearAllProjectErrors());
-    //   // }
-    //   // if (appMessage) {
-    //   //   toast.success(appMessage);
-    //   //   setAppId(null);
-    //   //   dispatch(resetSoftwareApplicationSlice());
-    //   //   dispatch(getAllSoftwareApplications());
-    //   // }
+    if (skillError) {
+      toast.error(skillError);
+      dispatch(clearAllSkillSliceErrors());
+    }
+    if (appError) {
+      toast.error(appError);
+      dispatch(clearAllApplicationSliceErrors());
+    }
+    if (projectError) {
+      toast.error(projectError);
+      dispatch(clearAllProjectSliceError());
+    }
+    if (appMessage) {
+      toast.success(appMessage);
+      setAppId(null);
+      dispatch(resetApplicationSlice());
+      dispatch(getAllApplications());
+    }
     if (timelineError) {
       toast.error(timelineError);
       dispatch(clearAllTimelineErrors());
     }
   }, [
-    //   dispatch,
-    //   skillLoading,
-    //   skillError,
-    //   skillMessage,
-    //   appLoading,
-    //   appError,
-    //   appMessage,
+    dispatch,
+    skillLoading,
+    skillError,
+    skillMessage,
+    appLoading,
+    appError,
+    appMessage,
     timelineError,
     timelineLoading,
     timelineMessage,
+    projectError,
   ]);
-  console.log(timeline);
 
   return (
     <>
@@ -131,7 +131,7 @@ const Dashboard = () => {
                 <CardHeader className="pb-2">
                   <CardTitle>Projects Completed</CardTitle>
                   <CardTitle className="text-6xl">
-                    {/* {projects && projects.length} */}
+                    {projects && projects.length}
                   </CardTitle>
                 </CardHeader>
                 <CardFooter>
@@ -142,7 +142,7 @@ const Dashboard = () => {
                 <CardHeader className="pb-2">
                   <CardTitle>Skills</CardTitle>
                   <CardTitle className="text-6xl">
-                    {/* {skills && skills.length} */}
+                    {skills && skills.length}
                   </CardTitle>
                 </CardHeader>
                 <CardFooter>
@@ -157,29 +157,32 @@ const Dashboard = () => {
                     <CardTitle>Projects</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <Table>
+                    <Table className={'text-center'}>
                       <TableHeader>
                         <TableRow>
                           <TableHead>Title</TableHead>
-                          <TableHead className="hidden md:table-cell">
+                          <TableHead className="hidden md:table-cell text-center">
                             Stack
                           </TableHead>
-                          <TableHead className="hidden md:table-cell">
+                          <TableHead className="hidden md:table-cell text-center">
                             Deployed
                           </TableHead>
-                          <TableHead className="md:table-cell">
+                          <TableHead className="md:table-cell text-center">
                             Update
                           </TableHead>
-                          <TableHead className="text-right">Visit</TableHead>
+                          <TableHead className="text-center">Visit</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {/* {projects && projects.length > 0 ? (
+                        {projects && projects.length > 0 ? (
                           projects.map((element) => {
                             return (
-                              <TableRow className="bg-accent" key={element._id}>
+                              <TableRow
+                                className="not-odd:bg-muted/20"
+                                key={element._id}
+                              >
                                 <TableCell>
-                                  <div className="font-medium">
+                                  <div className="font-medium text-left">
                                     {element.title}
                                   </div>
                                 </TableCell>
@@ -199,7 +202,7 @@ const Dashboard = () => {
                                     <Button>Update</Button>
                                   </Link>
                                 </TableCell>
-                                <TableCell className="text-right">
+                                <TableCell className="text-center">
                                   <Link
                                     to={element.projectLink}
                                     target="_blank"
@@ -210,13 +213,13 @@ const Dashboard = () => {
                               </TableRow>
                             );
                           })
-                        ) : ( */}
-                        <TableRow>
-                          <TableCell className="text-3xl overflow-y-hidden">
-                            You have not added any project.
-                          </TableCell>
-                        </TableRow>
-                        {/* )} */}
+                        ) : (
+                          <TableRow>
+                            <TableCell className="text-3xl overflow-y-hidden">
+                              You have not added any project.
+                            </TableCell>
+                          </TableRow>
+                        )}
                       </TableBody>
                     </Table>
                   </CardContent>
@@ -226,72 +229,91 @@ const Dashboard = () => {
             <Tabs>
               <TabsContent>
                 <Card>
-                  <CardHeader className="px-7 gap-3">
-                    <CardTitle>Skills</CardTitle>
+                  <CardHeader className="px-4 sm:px-7 gap-3">
+                    <CardTitle className="text-xl sm:text-2xl">
+                      Skills
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent className="grid sm:grid-cols-2 gap-4">
-                    {/* {skills && skills.length > 0 ? (
+                  <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+                    {skills && skills.length > 0 ? (
                       skills.map((element) => {
                         return (
-                          <Card key={element._id}>
-                            <CardHeader>{element.title}</CardHeader>
-                            <CardFooter>
-                              <Progress value={element.proficiency} />
+                          <Card
+                            key={element._id}
+                            className="hover:shadow-md hover:shadow-card-foreground transition-shadow gap-0"
+                          >
+                            <CardHeader className="p-4">
+                              <CardTitle className="text-base sm:text-lg">
+                                {element.title}
+                              </CardTitle>
+                            </CardHeader>
+                            <CardFooter className="p-4">
+                              <Progress
+                                value={element.proficiency}
+                                className="h-2"
+                              />
                             </CardFooter>
                           </Card>
                         );
                       })
-                    ) : ( */}
-                    <p className="text-3xl">You have not added any skill.</p>
-                    {/* )} */}
+                    ) : (
+                      <p className="text-xl sm:text-2xl col-span-full text-center py-4">
+                        You have not added any skills.
+                      </p>
+                    )}
                   </CardContent>
                 </Card>
               </TabsContent>
             </Tabs>
             <Tabs>
-              <TabsContent className="grid min-[1050px]:grid-cols-2 gap-4">
+              <TabsContent className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <Card>
-                  <CardHeader className="px-7">
-                    <CardTitle>Software Applications</CardTitle>
+                  <CardHeader className="px-4 sm:px-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <CardTitle className="text-xl sm:text-2xl">
+                      Software Applications
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="overflow-x-auto">
                     <Table>
                       <TableHeader>
                         <TableRow>
                           <TableHead>Name</TableHead>
-                          <TableHead className="md:table-cell">Icon</TableHead>
-                          <TableHead className="md:table-cell text-center">
-                            Action
+                          <TableHead className="hidden sm:table-cell">
+                            Icon
                           </TableHead>
+                          <TableHead className="text-center">Action</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {/* {softwareApplications &&
-                        softwareApplications.length > 0 ? (
-                          softwareApplications.map((element) => {
+                        {applications && applications.length > 0 ? (
+                          applications.map((element) => {
                             return (
-                              <TableRow className="bg-accent" key={element._id}>
+                              <TableRow
+                                className="hover:bg-muted/50"
+                                key={element._id}
+                              >
                                 <TableCell className="font-medium">
                                   {element.name}
                                 </TableCell>
-                                <TableCell className="md:table-cell">
+                                <TableCell className="hidden sm:table-cell">
                                   <img
-                                    className="w-7 h-7"
+                                    className="w-6 h-6 sm:w-7 sm:h-7"
                                     src={element.svg && element.svg.url}
                                     alt={element.name}
                                   />
                                 </TableCell>
-                                <TableCell className="md:table-cell  text-center">
+                                <TableCell className="text-center">
                                   {appLoading && appId === element._id ? (
                                     <SpecialLoadingButton
                                       content={'Deleting'}
-                                      width={'w-fit'}
+                                      width={'w-28 sm:w-fit'}
                                     />
                                   ) : (
                                     <Button
                                       onClick={() =>
                                         handleDeleteSoftwareApp(element._id)
                                       }
+                                      className="w-28 sm:w-auto"
                                     >
                                       Delete
                                     </Button>
@@ -300,13 +322,16 @@ const Dashboard = () => {
                               </TableRow>
                             );
                           })
-                        ) : ( */}
-                        <TableRow>
-                          <TableCell className="text-3xl overflow-y-hidden">
-                            You have not added any skill.
-                          </TableCell>
-                        </TableRow>
-                        {/* )} */}
+                        ) : (
+                          <TableRow>
+                            <TableCell
+                              colSpan={3}
+                              className="text-xl sm:text-2xl text-center py-4"
+                            >
+                              You have not added any applications.
+                            </TableCell>
+                          </TableRow>
+                        )}
                       </TableBody>
                     </Table>
                   </CardContent>
@@ -333,7 +358,10 @@ const Dashboard = () => {
                         {timeline && timeline.length > 0 ? (
                           timeline.map((element) => {
                             return (
-                              <TableRow className="bg-accent" key={element._id}>
+                              <TableRow
+                                className="not-odd:bg-muted/20"
+                                key={element._id}
+                              >
                                 <TableCell className="font-medium">
                                   {element.title}
                                 </TableCell>

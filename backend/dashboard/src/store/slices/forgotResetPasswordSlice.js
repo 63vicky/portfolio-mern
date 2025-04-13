@@ -2,6 +2,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  // 'https://portfolio-mern-xj4h.onrender.com/api/v1';
+  'http://localhost:4000/api/v1';
+
 const initialState = {
   loading: false,
   error: null,
@@ -55,7 +60,7 @@ export const forgotPassword = (email) => async (dispatch) => {
     dispatch(forgotResetPassSlice.actions.forgotPasswordRequest());
 
     const { data } = await axios.post(
-      'https://portfolio-mern-xj4h.onrender.com/api/v1/user/password/forgot',
+      `${API_URL}/user/password/forgot`,
       { email },
       {
         withCredentials: true,
@@ -78,8 +83,7 @@ export const resetPassword =
     dispatch(forgotResetPassSlice.actions.resetPasswordRequest());
     try {
       const { data } = await axios.put(
-        // `https://portfolio-mern-xj4h.onrender.com/api/v1/user/password/reset/${token}`,
-        `http://localhost:4000/api/v1/user/password/reset/${token}`,
+        `${API_URL}/user/password/reset/${token}`,
         { password, confirmPassword },
         {
           withCredentials: true,

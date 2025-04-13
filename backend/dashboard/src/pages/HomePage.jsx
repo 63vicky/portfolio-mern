@@ -29,7 +29,7 @@ import ThemeToggle from './ThemeToggle';
 import Messages from './sub-components/Messages';
 import AddProject from './sub-components/AddProject';
 import AddSkill from './sub-components/AddSkill';
-import AddSoftwareApplications from './sub-components/AddSoftwareApplications';
+import AddApplications from './sub-components/AddApplications';
 import AddTimeline from './sub-components/AddTimeline';
 
 const HomePage = () => {
@@ -44,7 +44,6 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    console.log(isAuthenticated, user, error);
     if (error) {
       toast.error(error);
       dispatch(clearAllUserErrors());
@@ -125,17 +124,17 @@ const HomePage = () => {
                 <TooltipTrigger asChild>
                   <Link
                     className={`flex h-9 w-9 items-center justify-center rounded-lg ${
-                      active === 'Add Uses'
+                      active === 'Add Application'
                         ? 'text-accent-foreground bg-accent'
                         : 'text-muted-foreground'
                     }  transition-colors hover:text-foreground md:h-8 md:w-8`}
-                    onClick={() => setActive('Add Uses')}
+                    onClick={() => setActive('Add Application')}
                   >
                     <LayoutGrid className="h-5 w-5" />
-                    <span className="sr-only">Add Uses</span>
+                    <span className="sr-only">Add Application</span>
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="right">Add Uses</TooltipContent>
+                <TooltipContent side="right">Add Application</TooltipContent>
               </Tooltip>
             </TooltipProvider>
             <TooltipProvider>
@@ -269,14 +268,14 @@ const HomePage = () => {
                 <SheetTrigger asChild>
                   <Link
                     className={`flex items-center gap-4 px-2.5 ${
-                      active === 'Add Uses'
+                      active === 'Add Application'
                         ? 'text-foreground'
                         : 'text-muted-foreground hover:text-foreground '
                     }`}
-                    onClick={() => setActive('Add Uses')}
+                    onClick={() => setActive('Add Application')}
                   >
                     <LayoutGrid className="h-5 w-5" />
-                    Add Uses
+                    Add Application
                   </Link>
                 </SheetTrigger>
                 <SheetTrigger asChild>
@@ -353,8 +352,8 @@ const HomePage = () => {
               return <AddProject />;
             case 'Add Skill':
               return <AddSkill />;
-            case 'Add Uses':
-              return <AddSoftwareApplications />;
+            case 'Add Application':
+              return <AddApplications />;
             case 'Add Timeline':
               return <AddTimeline />;
             case 'Messages':

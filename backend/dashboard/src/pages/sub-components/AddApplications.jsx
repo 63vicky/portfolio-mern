@@ -1,57 +1,58 @@
-import LoadingSpinner from "@/components/ui/loading-spinner";
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ImageIcon } from 'lucide-react';
+import LoadingSpinner from '@/components/ui/loading-spinner';
+import { useSelector, useDispatch } from 'react-redux';
 import {
-  addNewSkill,
-  clearAllSkillSliceErrors,
-  getAllSkills,
-  resetSkillSlice,
-} from "@/store/slices/skillSlice";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { ImageIcon } from "lucide-react";
+  addNewApplication,
+  clearAllApplicationSliceErrors,
+  getAllApplications,
+  resetApplicationSlice,
+} from '@/store/slices/applicationSlice';
+import { toast } from 'react-toastify';
 
-const AddSkill = () => {
-  const [title, setTitle] = useState("");
-  const [proficiency, setProficiency] = useState("");
-  const [svg, setSvg] = useState("");
-  const [svgPreview, setSvgPreview] = useState("");
+const AddApplications = () => {
+  const [name, setName] = useState('');
+  const [svg, setSvg] = useState('');
+  const [svgPreview, setSvgPreview] = useState('');
+
+  const { loading, error, message } = useSelector((state) => state.application);
+  const dispatch = useDispatch();
 
   const handleSvg = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      console.log(file);
       setSvg(file);
       setSvgPreview(reader.result);
     };
   };
 
-  const { loading, error, message } = useSelector((state) => state.skill);
-  const dispatch = useDispatch();
-
-  const handleAddNewSkill = (e) => {
+  const handleAddNewApplication = (e) => {
     e.preventDefault();
     const formData = new FormData();
 
-    formData.append("title", title);
-    formData.append("proficiency", proficiency);
-    formData.append("svg", svg);
-
-    dispatch(addNewSkill(formData));
+    formData.append('name', name);
+    formData.append('svg', svg);
+    dispatch(addNewApplication(formData));
   };
 
   useEffect(() => {
     if (error) {
       toast.error(error);
-      dispatch(clearAllSkillSliceErrors());
+      dispatch(clearAllApplicationSliceErrors());
     }
     if (message) {
       toast.success(message);
-      dispatch(resetSkillSlice());
-      dispatch(getAllSkills());
+      dispatch(resetApplicationSlice());
+      dispatch(getAllApplications());
+      setName('');
+      setSvg('');
+      setSvgPreview('');
     }
   }, [error, message, dispatch]);
 
@@ -65,12 +66,12 @@ const AddSkill = () => {
       <div className="flex justify-center items-center min-h-[100vh] sm:pl-14 sm:gap-4 sm:py-4">
         <form
           className="md:w-[650px] w-full px-5 bg-background py-8 rounded-lg"
-          onSubmit={handleAddNewSkill}
+          onSubmit={handleAddNewApplication}
         >
           <div className="space-y-12">
             <div className="border-b border-foreground/10 pb-12">
               <h2 className="font-semibold leading-7 text-foreground text-3xl text-center">
-                ADD NEW SKILL
+                ADD New Application
               </h2>
               <div className="mt-10 flex flex-col gap-5">
                 <motion.div
@@ -79,16 +80,16 @@ const AddSkill = () => {
                   transition={{ delay: 0.1 }}
                   className="w-full sm:col-span-4"
                 >
-                  <label className="font-medium text-sm leading-6 block text-foreground">
-                    Title
-                  </label>
+                  <Label className="font-medium text-sm leading-6 block text-foreground">
+                    Name
+                  </Label>
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-foreground focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
-                      <input
+                      <Input
                         type="text"
-                        placeholder="Skill Title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        placeholder="Application Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                         className="block flex-1 border-0 bg-transparent py-1.5 px-2 text-foreground placeholder:text-foreground/20 focus-visible:outline-0 focus:ring-0 sm:text-sm sm:leading-6"
                       />
                     </div>
@@ -100,33 +101,12 @@ const AddSkill = () => {
                   transition={{ delay: 0.2 }}
                   className="w-full sm:col-span-4"
                 >
-                  <label className="font-medium text-sm leading-6 block text-foreground">
-                    Proficiency
-                  </label>
-                  <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-foreground focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
-                      <input
-                        type="number"
-                        placeholder="30"
-                        value={proficiency}
-                        onChange={(e) => setProficiency(e.target.value)}
-                        className="block flex-1 border-0 bg-transparent py-1.5 px-2 text-foreground placeholder:text-foreground/20 focus-visible:outline-0 focus:ring-0 sm:text-sm sm:leading-6"
-                      />
-                    </div>
-                  </div>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="w-full sm:col-span-4"
-                >
                   <div className="col-span-full">
                     <label
                       htmlFor="cover-photo"
                       className="block text-sm/6 font-medium text-foreground"
                     >
-                      Cover photo
+                      Application Logo
                     </label>
                     <div className="mt-2 flex justify-center rounded-lg border border-dashed border-foreground/25 px-6 py-10">
                       <div className="text-center">
@@ -171,7 +151,7 @@ const AddSkill = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
+              transition={{ delay: 0.4 }}
             >
               {loading ? (
                 <div className="flex justify-center">
@@ -179,7 +159,7 @@ const AddSkill = () => {
                 </div>
               ) : (
                 <Button className="w-full" type="submit">
-                  Add Skill
+                  Add Application
                 </Button>
               )}
             </motion.div>
@@ -190,4 +170,4 @@ const AddSkill = () => {
   );
 };
 
-export default AddSkill;
+export default AddApplications;

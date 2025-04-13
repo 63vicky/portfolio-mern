@@ -23,6 +23,9 @@ import UpdateProject from './pages/UpdateProject';
 import { getAllMessages } from './store/slices/messagesSlice';
 import SpecialLoadingButton from './pages/sub-components/SpecialLoadingButton';
 import { getAllTimeline } from './store/slices/timelineSlice';
+import { getAllSkills } from './store/slices/skillSlice';
+import { getAllApplications } from './store/slices/applicationSlice';
+import { getAllProjects } from './store/slices/projectSlice';
 
 function App() {
   const dispatch = useDispatch();
@@ -32,6 +35,9 @@ function App() {
     dispatch(getUser());
     dispatch(getAllMessages());
     dispatch(getAllTimeline());
+    dispatch(getAllSkills());
+    dispatch(getAllApplications());
+    dispatch(getAllProjects());
   }, [dispatch]);
   if (loading) {
     return (
