@@ -8,7 +8,7 @@ const Account = () => {
   const [selectedComponent, setSelectedComponent] = useState('Profile');
   return (
     <div className="flex min-h-screen w-full flex-col">
-      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 sm:pl-20">
+      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8">
         <div className="mx-auto grid w-full max-w-6xl gap-2">
           <h1 className="text-3xl font-semibold">Settings</h1>
         </div>
@@ -53,16 +53,12 @@ const Account = () => {
               switch (selectedComponent) {
                 case 'Profile':
                   return <Profile />;
-                  break;
                 case 'Update Profile':
                   return <UpdateProfile />;
-                  break;
                 case 'Update Password':
                   return <UpdatePassword />;
-                  break;
                 default:
                   return <Profile />;
-                  break;
               }
             })()}
           </div>

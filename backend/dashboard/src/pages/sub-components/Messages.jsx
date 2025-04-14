@@ -46,7 +46,7 @@ const Messages = () => {
 
   return (
     <>
-      <div className="min-h-[100vh] sm:gap-4 sm:py-4 sm:pl-20 px-4">
+      <div className="min-h-[100vh] sm:gap-4 sm:py-4 px-4">
         <Tabs>
           <TabsContent>
             <Card>

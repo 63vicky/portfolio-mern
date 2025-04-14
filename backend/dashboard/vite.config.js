@@ -1,31 +1,13 @@
-import { defineConfig } from 'vite';
+import path from 'path';
+import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { defineConfig } from 'vite';
 
 export default defineConfig({
-  plugins: [react()],
-  server: {
-    port: 5173,
-  },
-  build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
-    rollupOptions: {
-      output: {
-        manualChunks: undefined,
-      },
-    },
-  },
+  plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      '@': resolve(__dirname, './src'),
+      '@': path.resolve(__dirname, './src'),
     },
-  },
-  optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom'],
   },
 });

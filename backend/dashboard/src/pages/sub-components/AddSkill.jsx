@@ -1,22 +1,22 @@
-import LoadingSpinner from "@/components/ui/loading-spinner";
+import LoadingSpinner from '@/components/ui/loading-spinner';
 import {
   addNewSkill,
   clearAllSkillSliceErrors,
   getAllSkills,
   resetSkillSlice,
-} from "@/store/slices/skillSlice";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { ImageIcon } from "lucide-react";
+} from '@/store/slices/skillSlice';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { ImageIcon } from 'lucide-react';
 
 const AddSkill = () => {
-  const [title, setTitle] = useState("");
-  const [proficiency, setProficiency] = useState("");
-  const [svg, setSvg] = useState("");
-  const [svgPreview, setSvgPreview] = useState("");
+  const [title, setTitle] = useState('');
+  const [proficiency, setProficiency] = useState('');
+  const [svg, setSvg] = useState('');
+  const [svgPreview, setSvgPreview] = useState('');
 
   const handleSvg = (e) => {
     const file = e.target.files[0];
@@ -36,9 +36,9 @@ const AddSkill = () => {
     e.preventDefault();
     const formData = new FormData();
 
-    formData.append("title", title);
-    formData.append("proficiency", proficiency);
-    formData.append("svg", svg);
+    formData.append('title', title);
+    formData.append('proficiency', proficiency);
+    formData.append('svg', svg);
 
     dispatch(addNewSkill(formData));
   };
@@ -62,7 +62,7 @@ const AddSkill = () => {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="flex justify-center items-center min-h-[100vh] sm:pl-14 sm:gap-4 sm:py-4">
+      <div className="flex justify-center items-center min-h-[100vh] sm:gap-4 sm:py-4">
         <form
           className="md:w-[650px] w-full px-5 bg-background py-8 rounded-lg"
           onSubmit={handleAddNewSkill}

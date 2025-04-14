@@ -59,7 +59,7 @@ const AddTimeline = () => {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="flex justify-center items-center min-h-[100vh] sm:pl-14 sm:gap-4 sm:py-4">
+      <div className="flex justify-center items-center min-h-[100vh] sm:gap-4 sm:py-4">
         <form
           className="md:w-[650px] w-full px-5 bg-background py-8 rounded-lg"
           onSubmit={handleAddNewTimeline}
