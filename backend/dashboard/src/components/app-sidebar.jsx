@@ -52,13 +52,13 @@ import {
 export function AppSidebar({ active, setActive, ...props }) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
+      <SidebarHeader className="sticky top-0 p-0 z-30 h-14 border-b bg-background sm:h-[90px] max-[900px]:h-[90px]">
         {/* <TeamSwitcher teams={data.teams} /> */}
-        <SidebarTrigger className="w-full h-9 text-4xl" />
+        <SidebarTrigger className="w-full h-full rounded-none p-4 text-4xl" />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarMenu>
+          <SidebarMenu className="gap-2">
             <TooltipProvider>
               <Link
                 className={`flex h-9 !w-full items-center rounded-lg ${

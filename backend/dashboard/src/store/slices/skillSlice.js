@@ -1,129 +1,159 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-
 const API_URL =
   import.meta.env.VITE_API_URL ||
   // 'https://portfolio-mern-xj4h.onrender.com/api/v1';
   'http://localhost:4000/api/v1';
 
-const initialState = {
-  loading: false,
-  error: null,
-  message: null,
-  skills: [],
-};
-
 const skillSlice = createSlice({
   name: 'skill',
-  initialState,
+  initialState: {
+    loading: false,
+    skills: [],
+    error: null,
+    message: null,
+  },
   reducers: {
-    getAllSkillRequest(state) {
+    getAllSkillsRequest(state, action) {
+      state.skills = [];
+      state.error = null;
       state.loading = true;
-      state.error = null;
-      state.skills = [];
     },
-    getAllSkillSuccess(state, action) {
-      state.loading = false;
-      state.error = null;
+    getAllSkillsSuccess(state, action) {
       state.skills = action.payload;
-    },
-    getAllSkillFailed(state, action) {
+      state.error = null;
       state.loading = false;
-      state.error = action.payload;
-      state.skills = [];
     },
-
-    addNewSkillRequest(state) {
+    getAllSkillsFailed(state, action) {
+      state.skills = state.skills;
+      state.error = action.payload;
+      state.loading = false;
+    },
+    addNewSkillRequest(state, action) {
       state.loading = true;
       state.error = null;
       state.message = null;
     },
     addNewSkillSuccess(state, action) {
-      state.loading = false;
       state.error = null;
+      state.loading = false;
       state.message = action.payload;
-      state.skills = [...state.skills, action.payload.newSkill];
     },
     addNewSkillFailed(state, action) {
-      state.loading = false;
       state.error = action.payload;
+      state.loading = false;
       state.message = null;
     },
-
-    deleteSkillRequest(state) {
+    deleteSkillRequest(state, action) {
       state.loading = true;
       state.error = null;
       state.message = null;
     },
     deleteSkillSuccess(state, action) {
-      state.loading = false;
       state.error = null;
+      state.loading = false;
       state.message = action.payload;
-      state.skills = state.skills.filter(
-        (skill) => skill._id !== action.payload.skillId
-      );
     },
     deleteSkillFailed(state, action) {
-      state.loading = false;
       state.error = action.payload;
+      state.loading = false;
       state.message = null;
     },
-
-    resetSkillSlice(state) {
-      state.loading = false;
+    updateSkillRequest(state, action) {
+      state.loading = true;
       state.error = null;
       state.message = null;
-      state.skills = state.skills;
     },
-    clearAllErrors(state) {
+    updateSkillSuccess(state, action) {
+      state.loading = false;
+      state.message = action.payload;
+      state.error = null;
+    },
+    updateSkillFailed(state, action) {
+      state.error = action.payload;
+      state.loading = false;
+      state.message = null;
+    },
+    resetSkillSlice(state, action) {
+      state.error = null;
+      state.skills = state.skills;
+      state.message = null;
+      state.loading = false;
+    },
+    clearAllErrors(state, action) {
       state.error = null;
       state.skills = state.skills;
     },
   },
 });
+
 export const getAllSkills = () => async (dispatch) => {
-  dispatch(skillSlice.actions.getAllSkillRequest());
+  dispatch(skillSlice.actions.getAllSkillsRequest());
   try {
-    const { data } = await axios.get(`${API_URL}/skill/getall`, {
+    const response = await axios.get(`${API_URL}/skill/getall`, {
       withCredentials: true,
     });
-    dispatch(skillSlice.actions.getAllSkillSuccess(data.skills));
+    dispatch(skillSlice.actions.getAllSkillsSuccess(response.data.skills));
     dispatch(skillSlice.actions.clearAllErrors());
   } catch (error) {
-    dispatch(skillSlice.actions.getAllSkillFailed(error.response.data.message));
+    dispatch(
+      skillSlice.actions.getAllSkillsFailed(error.response.data.message)
+    );
   }
 };
 
-export const addNewSkill = (skillData) => async (dispatch) => {
+export const addNewSkill = (data) => async (dispatch) => {
   dispatch(skillSlice.actions.addNewSkillRequest());
   try {
-    const { data } = await axios.post(`${API_URL}/skill/add`, skillData, {
+    const response = await axios.post(`${API_URL}/skill/add`, data, {
       withCredentials: true,
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
-    dispatch(skillSlice.actions.addNewSkillSuccess(data.message));
+    console.log(response);
+    console.log(response.data.message);
+    dispatch(skillSlice.actions.addNewSkillSuccess(response.data.message));
     dispatch(skillSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(skillSlice.actions.addNewSkillFailed(error.response.data.message));
   }
 };
 
-export const deleteSkill = (skillId) => async (dispatch) => {
+export const updateSkill = (id, proficiency) => async (dispatch) => {
+  dispatch(skillSlice.actions.updateSkillRequest());
+  try {
+    const response = await axios.put(
+      `${API_URL}/skill/update/${id}`,
+      { proficiency },
+      {
+        withCredentials: true,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
+    dispatch(skillSlice.actions.updateSkillSuccess(response.data.message));
+    dispatch(skillSlice.actions.clearAllErrors());
+  } catch (error) {
+    dispatch(skillSlice.actions.updateSkillFailed(error.response.data.message));
+  }
+};
+
+export const deleteSkill = (id) => async (dispatch) => {
   dispatch(skillSlice.actions.deleteSkillRequest());
   try {
-    const { data } = await axios.delete(`${API_URL}/skill/delete/${skillId}`, {
+    const response = await axios.delete(`${API_URL}/skill/delete/${id}`, {
       withCredentials: true,
     });
-    dispatch(skillSlice.actions.deleteSkillSuccess(data.message));
+    dispatch(skillSlice.actions.deleteSkillSuccess(response.data.message));
     dispatch(skillSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(skillSlice.actions.deleteSkillFailed(error.response.data.message));
   }
 };
-export const clearAllSkillSliceErrors = () => async (dispatch) => {
+
+export const clearAllSkillErrors = () => (dispatch) => {
   dispatch(skillSlice.actions.clearAllErrors());
 };
 
-export const resetSkillSlice = () => async (dispatch) => {
+export const resetSkillSlice = () => (dispatch) => {
   dispatch(skillSlice.actions.resetSkillSlice());
 };
 

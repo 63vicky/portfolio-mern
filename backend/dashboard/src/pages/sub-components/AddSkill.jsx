@@ -1,7 +1,7 @@
 import LoadingSpinner from '@/components/ui/loading-spinner';
 import {
   addNewSkill,
-  clearAllSkillSliceErrors,
+  clearAllSkillErrors,
   getAllSkills,
   resetSkillSlice,
 } from '@/store/slices/skillSlice';
@@ -46,7 +46,7 @@ const AddSkill = () => {
   useEffect(() => {
     if (error) {
       toast.error(error);
-      dispatch(clearAllSkillSliceErrors());
+      dispatch(clearAllSkillErrors());
     }
     if (message) {
       toast.success(message);

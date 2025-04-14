@@ -68,7 +68,7 @@ const HomePage = () => {
           <AppSidebar active={active} setActive={setActive} />
 
           <SidebarInset>
-            <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 py-4 sm:h-auto sm:px-6 max-[900px]:h-[100px]">
+            <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 py-4 sm:h-[90px] sm:px-6 max-[900px]:h-[90px]">
               <Sheet>
                 <SheetTrigger asChild>
                   <Button size="icon" variant="outline" className="md:hidden">
@@ -203,26 +203,28 @@ const HomePage = () => {
                 <ThemeToggle className="ml-auto" />
               </div>
             </header>
-            {(() => {
-              switch (active) {
-                case 'Dashboard':
-                  return <Dashboard />;
-                case 'Add Project':
-                  return <AddProject />;
-                case 'Add Skill':
-                  return <AddSkill />;
-                case 'Add Application':
-                  return <AddApplications />;
-                case 'Add Timeline':
-                  return <AddTimeline />;
-                case 'Messages':
-                  return <Messages />;
-                case 'Account':
-                  return <Account />;
-                default:
-                  return <Dashboard />;
-              }
-            })()}
+            <div className="bg-sidebar">
+              {(() => {
+                switch (active) {
+                  case 'Dashboard':
+                    return <Dashboard />;
+                  case 'Add Project':
+                    return <AddProject />;
+                  case 'Add Skill':
+                    return <AddSkill />;
+                  case 'Add Application':
+                    return <AddApplications />;
+                  case 'Add Timeline':
+                    return <AddTimeline />;
+                  case 'Messages':
+                    return <Messages />;
+                  case 'Account':
+                    return <Account />;
+                  default:
+                    return <Dashboard />;
+                }
+              })()}
+            </div>
           </SidebarInset>
         </SidebarProvider>
       </div>

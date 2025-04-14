@@ -18,7 +18,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
-import { clearAllSkillSliceErrors } from '@/store/slices/skillSlice';
+import { clearAllSkillErrors } from '@/store/slices/skillSlice';
 import {
   clearAllApplicationSliceErrors,
   deleteApplication,
@@ -77,7 +77,7 @@ const Dashboard = () => {
   useEffect(() => {
     if (skillError) {
       toast.error(skillError);
-      dispatch(clearAllSkillSliceErrors());
+      dispatch(clearAllSkillErrors());
     }
     if (appError) {
       toast.error(appError);
