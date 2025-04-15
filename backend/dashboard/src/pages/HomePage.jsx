@@ -64,11 +64,11 @@ const HomePage = () => {
   return (
     <>
       <div className="bg-muted/40 flex min-h-screen w-full flex-col">
-        <SidebarProvider>
+        <SidebarProvider defaultOpen={false}>
           <AppSidebar active={active} setActive={setActive} />
 
           <SidebarInset>
-            <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 py-4 sm:h-[90px] sm:px-6 max-[900px]:h-[90px]">
+            <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 py-4 sm:h-[70px] sm:px-6 max-[900px]:h-[90px]">
               <Sheet>
                 <SheetTrigger asChild>
                   <Button size="icon" variant="outline" className="md:hidden">
@@ -140,19 +140,6 @@ const HomePage = () => {
                     <SheetTrigger asChild>
                       <Link
                         className={`flex items-center gap-4 px-2.5 ${
-                          active === 'Profile'
-                            ? 'text-foreground'
-                            : 'text-muted-foreground hover:text-foreground '
-                        }`}
-                        onClick={() => setActive('Account')}
-                      >
-                        <User className="h-5 w-5" />
-                        Account
-                      </Link>
-                    </SheetTrigger>
-                    <SheetTrigger asChild>
-                      <Link
-                        className={`flex items-center gap-4 px-2.5 ${
                           active === 'Add Timeline'
                             ? 'text-foreground'
                             : 'text-muted-foreground hover:text-foreground '
@@ -163,6 +150,7 @@ const HomePage = () => {
                         Add Timeline
                       </Link>
                     </SheetTrigger>
+
                     <SheetTrigger asChild>
                       <Link
                         className={`flex items-center gap-4 px-2.5 ${
@@ -174,6 +162,20 @@ const HomePage = () => {
                       >
                         <MessageSquareMore className="h-5 w-5" />
                         Messages
+                      </Link>
+                    </SheetTrigger>
+
+                    <SheetTrigger asChild>
+                      <Link
+                        className={`flex items-center gap-4 px-2.5 ${
+                          active === 'Account'
+                            ? 'text-foreground'
+                            : 'text-muted-foreground hover:text-foreground '
+                        }`}
+                        onClick={() => setActive('Account')}
+                      >
+                        <User className="h-5 w-5" />
+                        Account
                       </Link>
                     </SheetTrigger>
                     <SheetTrigger asChild>
@@ -195,7 +197,7 @@ const HomePage = () => {
                 <img
                   src={user && user.avatar && user.avatar.url}
                   alt="avatar"
-                  className="w-15 h-15 rounded-full max-[900px]:hidden"
+                  className="w-12 h-12 rounded-full max-[900px]:hidden"
                 />
                 <h1 className="text-3xl max-[900px]:text-2xl">
                   Welcome, {user.fullName}

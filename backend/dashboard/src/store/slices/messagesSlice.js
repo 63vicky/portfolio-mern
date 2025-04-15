@@ -11,13 +11,14 @@ const initialState = {
   error: null,
   message: null,
   messages: [],
+  unreadCount: 0,
 };
 
 const messagesSlice = createSlice({
   name: 'messages',
   initialState,
   reducers: {
-    getAllMessageRequest(state, action) {
+    getAllMessageRequest(state) {
       state.loading = true;
       state.error = null;
       state.messages = [];
@@ -30,9 +31,35 @@ const messagesSlice = createSlice({
     getAllMessageFailed(state, action) {
       state.loading = false;
       state.error = action.payload;
-      state.messages = state.message;
     },
-    deleteMessageRequest(state, action) {
+    getUnreadCountRequest(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    getUnreadCountSuccess(state, action) {
+      state.loading = false;
+      state.error = null;
+      state.unreadCount = action.payload;
+    },
+    getUnreadCountFailed(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    markAllAsReadRequest(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    markAllAsReadSuccess(state) {
+      state.loading = false;
+      state.error = null;
+      state.unreadCount = 0;
+      state.messages = state.messages.map((msg) => ({ ...msg, isRead: true }));
+    },
+    markAllAsReadFailed(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    deleteMessageRequest(state) {
       state.loading = true;
       state.error = null;
       state.message = null;
@@ -51,11 +78,9 @@ const messagesSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.message = null;
-      state.messages = state.messages;
     },
     clearAllErrors(state) {
       state.error = null;
-      state.messages = state.messages;
     },
   },
 });
@@ -75,6 +100,38 @@ export const getAllMessages = () => async (dispatch) => {
   }
 };
 
+export const getUnreadCount = () => async (dispatch) => {
+  dispatch(messagesSlice.actions.getUnreadCountRequest());
+  try {
+    const { data } = await axios.get(`${API_URL}/message/unread-count`, {
+      withCredentials: true,
+    });
+    dispatch(messagesSlice.actions.getUnreadCountSuccess(data.unreadCount));
+  } catch (error) {
+    dispatch(
+      messagesSlice.actions.getUnreadCountFailed(error.response.data.message)
+    );
+  }
+};
+
+export const markAllAsRead = () => async (dispatch) => {
+  dispatch(messagesSlice.actions.markAllAsReadRequest());
+  try {
+    await axios.post(
+      `${API_URL}/message/mark-all-read`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+    dispatch(messagesSlice.actions.markAllAsReadSuccess());
+  } catch (error) {
+    dispatch(
+      messagesSlice.actions.markAllAsReadFailed(error.response.data.message)
+    );
+  }
+};
+
 export const deleteMessage = (id) => async (dispatch) => {
   dispatch(messagesSlice.actions.deleteMessageRequest());
   try {
@@ -89,6 +146,7 @@ export const deleteMessage = (id) => async (dispatch) => {
     );
   }
 };
+
 export const clearAllMessageErrors = () => async (dispatch) => {
   dispatch(messagesSlice.actions.clearAllErrors());
 };

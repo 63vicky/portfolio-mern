@@ -31,6 +31,24 @@ export const getAllMessages = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+export const getUnreadCount = catchAsyncErrors(async (req, res, next) => {
+  const count = await Message.countDocuments({ isRead: false });
+
+  res.status(200).json({
+    success: true,
+    unreadCount: count,
+  });
+});
+
+export const markAllAsRead = catchAsyncErrors(async (req, res, next) => {
+  await Message.updateMany({}, { isRead: true });
+
+  res.status(200).json({
+    success: true,
+    message: 'All messages marked as read',
+  });
+});
+
 export const deleteMessage = catchAsyncErrors(async (req, res, next) => {
   const { id } = req.params;
   const message = await Message.findById(id);

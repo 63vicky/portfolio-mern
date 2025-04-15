@@ -52,9 +52,9 @@ import {
 export function AppSidebar({ active, setActive, ...props }) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="sticky top-0 p-0 z-30 h-14 border-b bg-background sm:h-[90px] max-[900px]:h-[90px]">
+      <SidebarHeader className="sticky top-0 p-1 z-30 h-14 border-b bg-background sm:h-[70px] max-[900px]:h-[70px]">
         {/* <TeamSwitcher teams={data.teams} /> */}
-        <SidebarTrigger className="w-full h-full rounded-none p-4 text-4xl" />
+        <SidebarTrigger className="w-full h-full p-4 text-4xl" />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -166,46 +166,6 @@ export function AppSidebar({ active, setActive, ...props }) {
                 </Tooltip>
               </Link>
             </TooltipProvider>
-            <TooltipProvider>
-              <Link
-                className={`flex h-9 !w-full items-center rounded-lg ${
-                  active === 'Messages'
-                    ? 'text-accent-foreground bg-accent'
-                    : 'text-muted-foreground'
-                }  transition-colors hover:text-foreground md:h-8 md:w-8`}
-                onClick={() => setActive('Messages')}
-              >
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <SidebarMenuButton>
-                      <MessageSquareMore className="h-5 w-5" />
-                      <span className="flex items-center gap-2">Messages</span>
-                    </SidebarMenuButton>
-                  </TooltipTrigger>
-                  <TooltipContent side="right">Messages</TooltipContent>
-                </Tooltip>
-              </Link>
-            </TooltipProvider>
-            <TooltipProvider>
-              <Link
-                className={`flex h-9 !w-full items-center rounded-lg ${
-                  active === 'Account'
-                    ? 'text-accent-foreground bg-accent'
-                    : 'text-muted-foreground'
-                }  transition-colors hover:text-foreground md:h-8 md:w-8`}
-                onClick={() => setActive('Account')}
-              >
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <SidebarMenuButton>
-                      <User className="h-5 w-5" />
-                      <span className="flex items-center gap-2">Account</span>
-                    </SidebarMenuButton>
-                  </TooltipTrigger>
-                  <TooltipContent side="right">Account</TooltipContent>
-                </Tooltip>
-              </Link>
-            </TooltipProvider>
           </SidebarMenu>
         </SidebarGroup>
         {/* <NavMain items={data.navMain} /> */}
@@ -213,7 +173,7 @@ export function AppSidebar({ active, setActive, ...props }) {
         {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser />
+        <NavUser setActive={setActive} active={active} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
