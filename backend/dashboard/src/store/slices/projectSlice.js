@@ -50,6 +50,23 @@ const projectSlice = createSlice({
       state.error = action.payload;
       state.message = null;
     },
+
+    updateProjectRequest(state) {
+      state.loading = true;
+      state.error = null;
+      state.message = null;
+    },
+    updateProjectSuccess(state, action) {
+      state.loading = false;
+      state.message = action.payload;
+      state.error = null;
+    },
+    updateProjectFailed(state, action) {
+      state.error = action.payload;
+      state.loading = false;
+      state.message = null;
+    },
+
     deleteProjectRequest: (state) => {
       state.loading = true;
       state.error = null;
@@ -128,6 +145,28 @@ export const deleteProject = (id) => async (dispatch) => {
   } catch (error) {
     dispatch(
       projectSlice.actions.deleteProjectFailed(error.response.data.message)
+    );
+  }
+};
+
+export const updateProject = (id, newData) => async (dispatch) => {
+  dispatch(projectSlice.actions.updateProjectRequest());
+  try {
+    const response = await axios.put(
+      `${API_URL}/project/update/${id}`,
+      newData,
+      {
+        withCredentials: true,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }
+    );
+
+    dispatch(projectSlice.actions.updateProjectSuccess(response.data.message));
+    dispatch(projectSlice.actions.clearAllErrors());
+  } catch (error) {
+    console.log(error);
+    dispatch(
+      projectSlice.actions.updateProjectFailed(error.response.data.message)
     );
   }
 };

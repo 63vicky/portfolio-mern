@@ -10,7 +10,6 @@ import {
 import { Tabs, TabsContent, TabsTrigger } from '@/components/ui/tabs';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import SpecialLoadingButton from './SpecialLoadingButton';
 import {
   clearAllMessageErrors,
   deleteMessage,
@@ -19,6 +18,8 @@ import {
   resetMessageSlice,
 } from '@/store/slices/messagesSlice';
 import { toast } from 'react-toastify';
+import LoadingOverlay from '@/components/ui/loading-overlay';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Messages = () => {
   const [messageId, setMessageId] = useState('');
@@ -51,6 +52,31 @@ const Messages = () => {
     }
   }, [dispatch, error, message]);
 
+  // Loading skeleton for messages
+  const LoadingSkeleton = () => (
+    <div className="grid gap-4 sm:grid-cols-2">
+      {[...Array(4)].map((_, index) => (
+        <Card key={index} className="p-4">
+          <CardDescription className="text-primary">
+            <Skeleton className="h-4 w-[100px] mb-2" />
+            <Skeleton className="h-4 w-[200px]" />
+          </CardDescription>
+          <CardDescription className="text-primary">
+            <Skeleton className="h-4 w-[100px] mb-2" />
+            <Skeleton className="h-4 w-[200px]" />
+          </CardDescription>
+          <CardDescription className="text-primary">
+            <Skeleton className="h-4 w-[100px] mb-2" />
+            <Skeleton className="h-4 w-[200px]" />
+          </CardDescription>
+          <CardFooter className="justify-end">
+            <Skeleton className="h-8 w-32" />
+          </CardFooter>
+        </Card>
+      ))}
+    </div>
+  );
+
   return (
     <div className="min-h-[100vh] sm:gap-4 sm:py-4 px-4">
       <Tabs>
@@ -59,10 +85,12 @@ const Messages = () => {
             <CardHeader className="flex gap-4 sm:flex-row sm:items-center sm:justify-between">
               <CardTitle>Messages</CardTitle>
             </CardHeader>
-            <CardContent className="grid gap-4 sm:grid-cols-2">
-              {messages && messages.length > 0 ? (
-                messages.map((message) => {
-                  return (
+            <CardContent>
+              {loading ? (
+                <LoadingSkeleton />
+              ) : messages && messages.length > 0 ? (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {messages.map((message) => (
                     <Card className="p-4" key={message._id}>
                       <CardDescription className="text-primary">
                         <span>Sender Name: </span>
@@ -79,7 +107,12 @@ const Messages = () => {
 
                       <CardFooter className="justify-end">
                         {loading && messageId === message._id ? (
-                          <SpecialLoadingButton />
+                          <Button disabled className="w-32">
+                            <div className="flex items-center gap-2">
+                              <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                              <span>Deleting...</span>
+                            </div>
+                          </Button>
                         ) : (
                           <Button
                             className="w-32"
@@ -90,8 +123,8 @@ const Messages = () => {
                         )}
                       </CardFooter>
                     </Card>
-                  );
-                })
+                  ))}
+                </div>
               ) : (
                 <CardHeader>No Messages Found</CardHeader>
               )}
@@ -99,6 +132,7 @@ const Messages = () => {
           </Card>
         </TabsContent>
       </Tabs>
+      {loading && <LoadingOverlay message="Loading messages..." />}
     </div>
   );
 };

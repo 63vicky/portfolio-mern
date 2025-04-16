@@ -98,23 +98,29 @@ export const updateProject = catchAsyncErrors(async (req, res, next) => {
       public_id: cloudinaryResponse.public_id,
       url: cloudinaryResponse.secure_url,
     };
-
-    const newProject = await Project.findByIdAndUpdate(
-      req.params.id,
-      newProjectData,
-      {
-        new: true,
-        runValidators: true,
-        useFindAndModify: false,
-      }
-    );
-    res.status(200).json({
-      success: true,
-      message: 'Project Updated!',
-      project: newProject,
-    });
   }
+
+  const project = await Project.findByIdAndUpdate(
+    req.params.id,
+    newProjectData,
+    {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    }
+  );
+
+  if (!project) {
+    return next(new ErrorHandler('Project not found!', 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    message: 'Project Updated Successfully!',
+    project,
+  });
 });
+
 export const deleteProject = catchAsyncErrors(async (req, res, next) => {
   const { id } = req.params;
   const project = await Project.findById(id);

@@ -46,16 +46,6 @@ export function NavUser({ setActive, active }) {
   const { unreadCount } = useSelector((state) => state.messages);
   const dispatch = useDispatch();
 
-  // Fetch unread count on mount and every 30 seconds
-  useEffect(() => {
-    dispatch(getUnreadCount());
-    const interval = setInterval(() => {
-      dispatch(getUnreadCount());
-    }, 30000); // 30 seconds
-
-    return () => clearInterval(interval);
-  }, [dispatch]);
-
   const handleLogout = () => {
     dispatch(logout());
     toast.success('Logout successfully.');

@@ -4,6 +4,7 @@ import {
   BookOpen,
   Bot,
   Command,
+  Dot,
   Frame,
   GalleryVerticalEnd,
   Map,
@@ -48,8 +49,24 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getUnreadCount } from '@/store/slices/messagesSlice';
+import { Badge } from './ui/badge';
 
 export function AppSidebar({ active, setActive, ...props }) {
+  const { unreadCount } = useSelector((state) => state.messages);
+  const dispatch = useDispatch();
+
+  // Fetch unread count on mount and every 30 seconds
+  useEffect(() => {
+    dispatch(getUnreadCount());
+    const interval = setInterval(() => {
+      dispatch(getUnreadCount());
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(interval);
+  }, [dispatch]);
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="sticky top-0 p-1 z-30 h-14 border-b bg-background sm:h-[70px] max-[900px]:h-[70px]">
@@ -173,7 +190,14 @@ export function AppSidebar({ active, setActive, ...props }) {
         {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser setActive={setActive} active={active} />
+        <div className="relative">
+          {unreadCount > 0 && (
+            <div className="absolute -top-[0.7rem] -right-2 z-10">
+              <Dot className="text-red-600 stroke-[0.4rem]" />
+            </div>
+          )}
+          <NavUser setActive={setActive} active={active} />
+        </div>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
