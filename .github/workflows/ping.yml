@@ -3,7 +3,6 @@ name: Ping Render Backend
 on:
   schedule:
     - cron: '*/14 * * * *'
-  workflow_dispatch: {}
 
 jobs:
   ping-service:
