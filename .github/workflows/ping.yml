@@ -1,0 +1,13 @@
+name: Ping Render Backend
+
+on:
+  schedule:
+    - cron: '*/14 * * * *'
+  workflow_dispatch: {}
+
+jobs:
+  ping-service:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send GET request
+        run: curl -sS ${{ secrets.RENDER_BACKEND_URL }}
